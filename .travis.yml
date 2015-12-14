@@ -6,10 +6,11 @@ php:
 before_install:
   - 'npm install -g bower grunt-cli'
   - 'bower install'
+  - 'composer self-update'
 install:
   - 'npm install'
   - 'bower install'
   - 'composer install -d $PHP_DIR'
 script:
-  - 'phpunit -c $PHP_DIR'
+  - 'grunt build'
 
