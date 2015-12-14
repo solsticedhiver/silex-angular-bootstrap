@@ -6,7 +6,6 @@ php:
 before_install:
   - 'npm install -g bower grunt-cli'
   - 'bower install'
-  - 'composer self update'
 install:
   - 'npm install'
   - 'bower install'
