@@ -1,10 +1,16 @@
+env:
+  - PHP_DIR=app/api/
 language: php
 php:
   - '5.5'
 before_install:
   - 'npm install -g bower grunt-cli'
   - 'bower install'
+  - 'composer self update'
 install:
   - 'npm install'
   - 'bower install'
-  - 'composer install -d app/api/'
+  - 'composer install -d $PHP_DIR'
+script:
+  - 'phpunit -c $PHP_DIR'
+
