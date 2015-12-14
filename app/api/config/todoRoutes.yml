@@ -1,0 +1,24 @@
+getAll:
+  path: /
+  defaults: { _controller: 'Todo\TodoController::getAllAction' }
+  methods:  [GET]
+
+getOne:
+  path: /{id}
+  defaults: { _controller: 'Todo\TodoController::getOneAction' }
+  methods:  [GET]
+
+deleteOne:
+  path: /{id}
+  defaults: { _controller: 'Todo\TodoController::deleteOneAction' }
+  methods:  [DELETE]
+
+addOne:
+  path: /
+  defaults: { _controller: 'Todo\TodoController::addOneAction' }
+  methods:  [POST]
+
+editOne:
+  path: /{id}
+  defaults: { _controller: 'Todo\TodoController::editOneAction' }
+  methods:  [PUT]
