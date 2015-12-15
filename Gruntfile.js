@@ -333,7 +333,6 @@ module.exports = function(grunt) {
             '.htaccess',
             '*.html',
             'views/{,*/}*.html',
-            'bower_components/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
           ]
@@ -366,6 +365,23 @@ module.exports = function(grunt) {
         'svgmin'
       ]
     },
+
+    // make a zipfile
+    compress: {
+      zip: {
+        options: {
+          archive: 'release.zip'
+        },
+        files: [
+          {
+            src: ['dist/**'],
+            dest: ''
+          } // includes files in path and its subdirs
+        ]
+      }
+    },
+
+
 
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
@@ -449,7 +465,8 @@ module.exports = function(grunt) {
     'uglify',
     'rev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'compress:zip'
   ]);
 
   grunt.registerTask('default', [
