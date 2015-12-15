@@ -12,6 +12,11 @@ Sample init TODO project, PHP Silex and AngularJs. Use sqlite as a database.
   composer install -d app/api
 ```
 
+##run
+```bash
+  php -S 127.0.0.1:8080 -t . api/app.php
+```
+
 ##development
 
 You can use grunt (`npm install grunt-cli`) for live-reloading
