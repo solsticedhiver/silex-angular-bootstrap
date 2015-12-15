@@ -12,7 +12,7 @@ install:
 - bower install
 - composer install -d $PHP_DIR
 script:
-- grunt build
+- grunt
 deploy:
   provider: releases
   api_key:
