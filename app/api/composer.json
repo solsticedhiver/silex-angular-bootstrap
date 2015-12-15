@@ -1,11 +1,11 @@
 {
-    "name": "gonzalo123/silexNgResourceExample",
+    "name": "lduboeuf/todosilexangular",
     "description": "Example of Silex Resource provider for Angular js",
     "minimum-stability": "stable",
     "authors": [
         {
-            "name": "Gonzalo Ayuso",
-            "email": "gonzalo123@gmail.com"
+            "name": "Lionel Duboeuf",
+            "email": "lionel.duboeuf@gmail.com"
         }
     ],
     "require": {
