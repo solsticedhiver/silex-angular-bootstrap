@@ -20,3 +20,4 @@ deploy:
   file: release.zip
   on:
     repo: afpa-stbrieuc/silex-angular-bootstrap
+    tags: true
