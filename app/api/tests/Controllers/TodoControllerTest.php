@@ -47,7 +47,7 @@ class TodoTest extends WebTestCase
 	public function testGetAll()
 	{
 	    $client = $this->createClient();
-	    $crawler = $client->request('GET', '/todos/');
+	    $crawler = $client->request('GET', '/api/todos/');
 
 	    //$payload = json_decode($client->getResponse()->getContent());
 	    
@@ -67,7 +67,7 @@ class TodoTest extends WebTestCase
 
 
     	$client = $this->createClient();
-    	$resp = $client->request('POST', '/todos/', array(),
+    	$resp = $client->request('POST', '/api/todos/', array(),
         	array(),
         	array('CONTENT_TYPE' => 'application/json'),
         	'{"name":"kikou"}');
@@ -83,7 +83,7 @@ class TodoTest extends WebTestCase
 
     	//update
 
-    	$resp = $client->request('PUT', '/todos/'.$id, array(),
+    	$resp = $client->request('PUT', '/api/todos/'.$id, array(),
         	array(),
         	array('CONTENT_TYPE' => 'application/json'),
         	'{"name":"mijo"}');
@@ -97,7 +97,7 @@ class TodoTest extends WebTestCase
 
     	//delete
     	$client = $this->createClient();
-   		$crawler = $client->request('DELETE', '/todos/'.$id);
+   		$crawler = $client->request('DELETE', '/api/todos/'.$id);
    		$this->assertEquals($client->getResponse()->getStatusCode(), 200);
 
 
