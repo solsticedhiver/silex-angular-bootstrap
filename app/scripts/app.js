@@ -1,12 +1,15 @@
 'use strict';
-
+//register all modules
 angular.module('mytodoApp', [
   'ngRoute',
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ui.sortable',
-  'xeditable'
+  'pascalprecht.translate',
+  'xeditable',
+  'ui.bootstrap',
+  'dialogs.main' //https://github.com/m-e-conroy/angular-dialog-service
 ])
   .config(['$routeProvider', function($routeProvider){
     $routeProvider
@@ -22,8 +25,22 @@ angular.module('mytodoApp', [
     // this is to allow calling GET /todos/ instead of /todos
     $resourceProvider.defaults.stripTrailingSlashes = false;
   }])
+  .config(['dialogsProvider',function(dialogsProvider){
+
+    dialogsProvider.setSize('sm');
+  }])
+  .config(['$translateProvider',function($translateProvider){
+    
+    $translateProvider.useSanitizeValueStrategy('sanitize');
+    $translateProvider.preferredLanguage('en-US');
+
+    $translateProvider.translations('en-US',{
+      DIALOGS_OK: 'OK'
+    });
+
+  }])
   .factory('Todo', ['$resource', function($resource){
-      return $resource('/todos/:id', {id:'@id'}, {
+      return $resource('/api/todos/:id', {id:'@id'}, {
         update: {
           method: 'PUT' // this method issues a PUT request
         }

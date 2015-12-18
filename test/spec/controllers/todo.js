@@ -32,7 +32,7 @@ describe('Controller: MainCtrl', function () {
 
       var todo = scope.todos[scope.todos.length-1];
       scope.delete(todo);
-      expect(scope.todos.length).toBe(0);
+      expect(scope.todos.length).toBe(1);
     });
 
 });
