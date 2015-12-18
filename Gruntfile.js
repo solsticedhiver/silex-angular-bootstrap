@@ -16,39 +16,55 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
 
 
-  // Configurable paths for the application
+  // grunt-connect-proxy middleware to serve PHP
+  var proxyMiddleware = function (connect, options) {
+    var middlewares = [];
+    var directory = options.directory || options.base[options.base.length - 1];
+    if (!Array.isArray(options.base)) {
+      options.base = [options.base];
+    }
+
+    // Setup the proxy
+    middlewares.push(require('grunt-connect-proxy/lib/utils').proxyRequest);
+
+    options.base.forEach(function(base) {
+      // Serve static files.
+      middlewares.push(connect.static(base));
+    });
+
+    // Make directory browse-able.
+    middlewares.push(connect.directory(directory));
+
+    return middlewares;
+  };
+
+
+
+   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
     dist: 'dist'
   };
 
-  // Define the configuration for all the tasks
+
+    // Watches files for changes and runs tasks based on the changed files
+// Define the configuration for all the tasks
   grunt.initConfig({
 
     // Project settings
-    yeoman: {
-      // configurable paths
-      app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
-    },
+    yeoman: appConfig,
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
         files: ['bower.json'],
-        tasks: ['bower-install']
-      },
-      markup: {
-        files: ['<%= yeoman.app %>/{,*/}*.html'],
-        options: {
-          livereload: '<%= php.options.livereload %>'
-        }
+        tasks: ['wiredep']
       },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
-          livereload: '<%= php.options.livereload %>'
+          livereload: '<%= connect.options.livereload %>'
         }
       },
       jsTest: {
@@ -64,60 +80,89 @@ module.exports = function(grunt) {
       },
       livereload: {
         options: {
-          livereload: '<%= php.options.livereload %>'
+          livereload: '<%= connect.options.livereload %>'
         },
         files: [
+          '<%= yeoman.app %>/api/{,{config,src,tests}/**/}/*',
           '<%= yeoman.app %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
-      },
+      }
+
     },
 
-    // PHP built-in server
-    php: {
+    // The actual grunt server settings
+    connect: {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729,
-        base: '<%= yeoman.app %>',
-        router: '<%= yeoman.app %>/api/app.php'
-
+        livereload: 35729
       },
+      proxies: [
+        {
+          context: '/api',
+          host: 'localhost',
+          port: '<%= php.options.port %>'
+        }
+      ],
       livereload: {
         options: {
           open: true,
-          middleware: function(php) {
+          middleware: function (connect, options) {
             return [
-              php.static('.tmp'),
-              php().use('/bower_components', php.static('./bower_components')),
-              php().use('/app/styles', php.static('./app/styles')),
-              php.static(appConfig.app)
-            ];
+              connect.static('.tmp'),
+              connect().use(
+                '/bower_components',
+                connect.static('./bower_components')
+              ),
+              connect.static(appConfig.app)
+            ].concat(proxyMiddleware(connect, options));
           }
         }
       },
       test: {
         options: {
           port: 9001,
-          middleware: function(php) {
+          middleware: function (connect, options) {
             return [
-              php.static('.tmp'),
-              php.static('test'),
-              php().use(
+              connect.static('.tmp'),
+              connect.static('test'),
+              connect().use(
                 '/bower_components',
-                php.static('./bower_components')
+                connect.static('./bower_components')
               ),
-              php.static(appConfig.app)
-            ];
+              connect.static(appConfig.app)
+            ].concat(proxyMiddleware(connect, options));
           }
         }
       },
       dist: {
         options: {
           open: true,
-          base: '<%= yeoman.dist %>'
+          base: '<%= yeoman.dist %>',
+          middleware: proxyMiddleware
+        }
+      }
+    },
+
+    // PHP built-in server
+    php: {
+      options: {
+        port: 8000,
+        // Change this to '0.0.0.0' to access the server from outside.
+        hostname: '127.0.0.1',
+        router: '<%= yeoman.app %>/api/app.php'
+      },
+      server: {
+        options: {
+          base: '<%= yeoman.app %>',
+        }
+      },
+      dist: {
+        options: {
+          base: '<%= yeoman.dist %>',
         }
       }
     },
@@ -166,11 +211,13 @@ module.exports = function(grunt) {
       server: '.tmp'
     },
 
-    // Automatically inject Bower components into the app
-    'bower-install': {
+   // Automatically inject Bower components into the app
+    wiredep: {
+      options: {
+        cwd: ''
+      },
       app: {
-        html: '<%= yeoman.app %>/index.html',
-        ignorePath: '<%= yeoman.app %>/'
+        src: ['<%= yeoman.app %>/index.html']
       }
     },
 
@@ -203,16 +250,15 @@ module.exports = function(grunt) {
 
 
     // Renames files for browser caching purposes
-    rev: {
+     // Renames files for browser caching purposes
+    filerev: {
       dist: {
-        files: {
-          src: [
-            '<%= yeoman.dist %>/scripts/{,*/}*.js',
-            '<%= yeoman.dist %>/styles/{,*/}*.css',
-            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/styles/fonts/*'
-          ]
-        }
+        src: [
+          '<%= yeoman.dist %>/scripts/{,*/}*.js',
+          '<%= yeoman.dist %>/styles/{,*/}*.css',
+          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.dist %>/styles/fonts/*'
+        ]
       }
     },
 
@@ -371,7 +417,6 @@ module.exports = function(grunt) {
     },
 
 
-
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
@@ -412,16 +457,20 @@ module.exports = function(grunt) {
     if (target === 'dist') {
       return grunt.task.run([
         'build',
-        'php:dist:keepalive'
+        'configureProxies',
+        'php:dist',
+        'connect:dist:keepalive'
       ]);
     }
 
     grunt.task.run([
       'clean:server',
-      'bower-install',
+      'wiredep',
       'concurrent:server',
-      'autoprefixer:server',
-      'php:livereload',
+      'autoprefixer',
+      'configureProxies',
+      'php:server',
+      'connect:livereload',
       'watch'
     ]);
 
@@ -437,22 +486,23 @@ module.exports = function(grunt) {
     'phpunit',
     'concurrent:test',
     'autoprefixer',
+    'connect:test',
     'karma'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
-    'bower-install',
+    'wiredep',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngAnnotate:dist',
+    'ngAnnotate',
     'copy:dist',
     'cdnify',
     'cssmin',
     'uglify',
-    'rev',
+    'filerev',
     'usemin',
     'htmlmin',
     'compress:zip'
