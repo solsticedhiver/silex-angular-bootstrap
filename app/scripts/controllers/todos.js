@@ -4,7 +4,11 @@ angular.module('mytodoApp')
   .controller('MainCtrl', function($scope, Todo, dialogs) {
 
     //fetch all todos'
-    $scope.todos = Todo.query();
+    $scope.todos = Todo.query(function() {
+      }, function(error) {
+        dialogs.error('Error', 'server error, please see console');
+        console.log(error.data);
+      });
 
     //$scope.alerts = alertService.get();
 
