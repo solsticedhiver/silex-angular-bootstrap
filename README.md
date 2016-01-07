@@ -4,21 +4,26 @@
 
 # silex-angular-bootstrap
 Sample init TODO project, built with:
-  - PHP Silex as the backend. 
+  - PHP Silex as the backend. ( use routing with yml config files )
   - AngularJs. for client side
   - Sqlite for the database.
   - Grunt for livereloading, build and tests tasks
   - Travis configuration for continuous integration
 
-
+This app is inspired by `yeoman` angular generator and several projects i don't remember of ( sorry ).
 
 ##pre-requisite for development
-npm, bower, grunt-cli, php composer, sqlite, php, sqlite pdo extension enabled
+  - [npm](https://www.npmjs.com/) for grunt dependencies
+  - [bower](http://bower.io/) ( `npm install -g bower` ) for assets management
+  - [php composer](https://getcomposer.org/) for server side php api
+  - `grunt-cli` ( `npm install -g grunt-cli`) as the tasks runner
+  - `sqlite` driver and enabled in php.ini
 
 
 ##install
 
 ```shell
+  git clone https://github.com/afpa-stbrieuc/silex-angular-bootstrap
   cd silex-angular-bootstrap
   npm install
   bower install
