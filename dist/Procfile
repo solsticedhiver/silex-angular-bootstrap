@@ -1,1 +1,0 @@
-web: api/vendor/bin/heroku-php-apache2

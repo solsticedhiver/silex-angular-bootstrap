@@ -1,3 +1,0 @@
-todos:
-  prefix: /api/todos
-  resource: todoRoutes.yml
