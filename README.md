@@ -1,10 +1,19 @@
 [![Build Status](https://travis-ci.org/afpa-stbrieuc/silex-angular-bootstrap.svg?branch=master)](https://travis-ci.org/afpa-stbrieuc/silex-angular-bootstrap)
 
+[Release](/releases/latest)
+
 # silex-angular-bootstrap
-Sample init TODO project, PHP Silex and AngularJs. Use sqlite as a database. Use Grunt.
-ld
+Sample init TODO project, built with:
+  - PHP Silex as the backend. 
+  - AngularJs. for client side
+  - Sqlite for the database.
+  - Grunt for livereloading, build and tests tasks
+  - Travis configuration for continuous integration
+
+
+
 ##pre-requisite
-npm installed, bower, grunt-cli, php composer, sqlite php pdo extension enabled
+npm, bower, grunt-cli, php composer, sqlite, php, sqlite pdo extension enabled
 
 
 ##install dev environment
