@@ -22,3 +22,5 @@ deploy:
     repo: afpa-stbrieuc/silex-angular-bootstrap
     tags: true
     all_branches: true
+notifications:
+  slack: afpa-dev-22:LPlanFBGehjXv16VZtbTT9o9
