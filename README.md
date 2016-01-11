@@ -19,7 +19,7 @@ Sample init TODO project, PHP Silex and AngularJs. Use sqlite as a database.
 
 ##development
 
-You can use grunt (`npm install grunt-cli`) for live-reloading
+You can use grunt (`npm install -g grunt-cli`) for live-reloading
 ```shell
   grunt serve
 ```

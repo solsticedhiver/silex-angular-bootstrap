@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
@@ -8,11 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;
 
-
-
 $app = new Silex\Application();
-
-
 
 //load routes from config/routes.yml
 $app['routes'] = $app->extend(
@@ -31,16 +26,8 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => __DIR__.'/log/dev.log',
 ));
 
-
-$app->register(
-    new Silex\Provider\DoctrineServiceProvider(),
-    array(
-        'db.options' => array(
-            'driver' => 'pdo_sqlite',
-            'path'   => __DIR__ . '/db/app.db.sqlite',
-        ),
-    )
-);
+$m = new MongoClient();
+$app['db'] = $m->timeshare;
 
 return $app;
 
