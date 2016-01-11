@@ -1,0 +1,24 @@
+getAll:
+  path: /
+  defaults: { _controller: 'Annonce\AnnonceController::getAllAction' }
+  methods:  [GET]
+
+getOne:
+  path: /{id}
+  defaults: { _controller: 'Annonce\AnnonceController::getOneAction' }
+  methods:  [GET]
+
+deleteOne:
+  path: /{id}
+  defaults: { _controller: 'Annonce\AnnonceController::deleteOneAction' }
+  methods:  [DELETE]
+
+addOne:
+  path: /
+  defaults: { _controller: 'Annonce\AnnonceController::addOneAction' }
+  methods:  [POST]
+
+editOne:
+  path: /{id}
+  defaults: { _controller: 'Annonce\AnnonceController::editOneAction' }
+  methods:  [PUT]

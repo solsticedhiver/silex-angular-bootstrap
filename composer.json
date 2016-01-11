@@ -1,0 +1,5 @@
+{
+    "require": {
+        "saxulum/saxulum-doctrine-mongodb-odm-provider": "^2.2"
+    }
+}
