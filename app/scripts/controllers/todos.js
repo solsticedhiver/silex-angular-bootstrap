@@ -4,7 +4,13 @@ angular.module('mytodoApp')
   .controller('MainCtrl', function($scope, Todo, dialogs) {
 
     //fetch all todos'
-    $scope.todos = Todo.query();
+    $scope.todos = Todo.query(
+      function() {},
+      function(error) { //error
+          dialogs.error('Error', 'server error');
+          console.log(error.data);
+        }
+    );
 
     //$scope.alerts = alertService.get();
 
@@ -13,8 +19,9 @@ angular.module('mytodoApp')
       Todo.delete(todo, function() {
         dialogs.notify('delete', 'cool');
         $scope.todos.splice($scope.todos.indexOf(todo), 1);
-      }, function() {
+      }, function(error) {
         dialogs.error('Error', 'server error');
+        console.log(error.data);
       });
 
     };
@@ -33,8 +40,9 @@ angular.module('mytodoApp')
       todo.name = name;
       Todo.update(todo,
         function() {},
-        function() { //error
+        function(error) { //error
           dialogs.error('Error', 'server error');
+          console.log(error.data);
         }
       );
     };

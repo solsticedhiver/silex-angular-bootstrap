@@ -409,8 +409,10 @@ module.exports = function(grunt) {
         },
         files: [
           {
-            src: ['dist/**'],
-            dest: ''
+            expand: true,
+            cwd: 'dist/',
+            src: ['**'],
+            dest: 'silex-angular-bootstrap'
           } // includes files in path and its subdirs
         ]
       }
