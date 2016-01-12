@@ -40,35 +40,61 @@ class AnnonceController
     {
         $payload = json_decode($request->getContent());
 
-        $newAnnonce = array(
-            'titre'  => $payload->titre,
-        	'lieu'   => $payload->lieu,
-        	'heure'  => $payload->heure,
-        	'date_annonce' => date('c'),
-        	'date_validite_debut' => $payload->date_validite_debut,
-        	'date_validite_fin' => $payload->date_validite_fin
-        	// à compléter
-        );
+        $newAnnonce = array (
+				'titre' => $payload->titre,
+				'lieu' => $payload->lieu,
+				'heure' => $payload->heure,
+				'date_annonce' => date ( 'c' ),
+				'date_validite_debut' => $payload->date_validite_debut,
+				'date_validite_fin' => $payload->date_validite_fin 
+		);
+		// à compléter
+		
+        // recupère l'id de la catégorie en BDD
         $categorie = $app['db']->Categorie->findOne(array('nom' => $payload->categorie));
         
         if ($categorie !== NULL) {
         	$id = new \MongoId($categorie['_id']->{'$id'});
         	$newAnnonce['categorie'] = $id;
+        } else {
+        	return new JsonResponse("Error: can't find category", 400);
+        }
+        
+        // récupère l'id du user dans la BDD
+        $user = $app['db']->Utilisateur->findOne(array('nom' => $payload->pseudo));
+        
+        if ($user !== NULL) {
+        	$id = new \MongoId($user['_id']->{'$id'});
+        	$newAnnonce['user'] = $id;
+        } else {
+        	return new JsonResponse("Error: can't find user", 400);
         }
         $app['db']->Annonces->insert($newAnnonce);
 
         return new JsonResponse($newAnnonce, 201);
     }
 
-    public function editOneAction($id, Application $app, Request $request)
-    {
-        $payload = json_decode($request->getContent());;
-        $user = [
-            'titre'  => $payload->titre,
+    public function editOneAction($id, Application $app, Request $request) {
+		$payload = json_decode ( $request->getContent () );
+		
+		$annonce = [ 
+				'titre' => $payload->titre,
+				'user' => new \MongoId($payload->user->{'$id'}),
+				'lieu' => $payload->lieu,
+				'heure' => $payload->heure,
+				'categorie' => new \MongoId($payload->categorie->{'$id'}),
+				'date_annonce' => $payload->date_annonce,
+        		'date_validite_debut' => $payload->date_validite_debut,
+        		'date_validite_fin' => $payload->date_validite_fin
         ];
         $collection = $app['db']->Annonces;
-        $collection->update($user);
+        $collection->update(array('_id' => new \MongoId($id)),$annonce);
 
-        return new JsonResponse($user);
+        return new JsonResponse($annonce);
+    }
+    
+    public function searchOne($cat, $loc, Application $app, Request $request) {
+    	$collection = $app['db']->Annonces;
+    	
     }
 }
